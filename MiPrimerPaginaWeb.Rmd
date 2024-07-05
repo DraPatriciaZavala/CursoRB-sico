@@ -1,0 +1,113 @@
+---
+title: "Mi primer página web"
+author: "Dra. Patricia Zavala Villagómez"
+date: "`r Sys.Date()`"
+output: html_document
+##Configuracion del documento
+---
+#Las areas grises o chong son fragmentos de codigo o instrucciones 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Titulo 1
+##Subtitulo
+###Subtitulo del subtitulo
+
+El texto en blanco y letras negras, es el texto que aparecera en el documento:
+
+# Importación de datos de fuentes externas.
+A continuación se revisará cómo importar datos de fuentes externas 
+
+##Importacion de tablas en excel
+Importaremos los precios historicos de precio de arroz 
+
+You can also embed plots, for example:
+registrados en diferentes centrales de abastos del pais. Para esto requeriremos una libreria llamada: openXlsx.
+
+Para instalar esta libreria es necesario ejecutar el comando o función install.packages("openxlsx)
+```{r intalaOpenXls, eval=FALSE}
+install.packages("openxlsx")
+```
+Una vez instalada la libreria, siempre que querramos utilizar la libreria en un nuevo archivo, la invocamos con la funcion library(openxlsx)
+```{r importacionpreciosarroz}
+#Se carga la libreria
+library(openxlsx)
+#Se importan los datos de precios de arroz
+Datos=read.xlsx("datosarroz.xlsx")
+```
+
+#Indización de objetos
+Consiste en extraer valores en la celda que nos interesa de un objeto, para guardarlo como un objeto nuevo.
+La indización nos sirve para extraer parte de los valores que forma parte de un objeto,puede ser empleada por vactores o matrices tipo numero o character, tambien es util para extraer o modificar valores anteriores y objetos data.frame.
+
+Por ejemplo si queremos extraer la quinta fila del objeto vectro2, la instruccion es la siguiente:
+
+```{r indizarvector}
+miVector2[5]
+
+#guardaremos el objeto con un nuevo nombre
+valorPi=miVector2[5]
+
+#Tambien podemos indizar un rango de filas o columnas a nuestro gusto
+miVector2[2:4]
+
+#Tambien podemos indizar filas y columnas a nuestro gusto creando x:y con la función c(fila1,fila2,...)
+
+miVector2[c(5,6,1,4,5,3,2,6)]
+
+#En el caso de objetos data.frame tambien se puede indizar filas y columnas, por ejemplo queremos extraer las 3 primeras filas de la columna 2 del objeto tabladatos2 
+tablaDatos2[1:3,2]
+
+#En el caso de objetos data.frame tambien se puede indizar filas y columnas, de manera arbitraria 
+tablaDatos2[c(2,5,3,1),c(2,1)]
+
+#Tambien podemos extraer rangos de filas y columnas en secuencia.Extraeremos las filas de 5a 10 y columna 2 a 5 de datos
+Datos[5:10,2:5]
+```
+
+##Trucos adicionales de indizacion
+Supongamos que una tabla de datos de entrada tiene columnas y numero de filas cambiantes y queremos siempre estar importando un rango de filas y/o columnas que terminan con la ultima de estas. Para ello nos auxiliamos de dos funciones.
+-La función ncol() que determina el numero de columnas de un objeto data.frame o matrix
+-La función nrow() que determina el numero de filas de un objeto data.frame o matrix
+```{r }
+ncol(Datos)
+nrow(Datos)
+
+Datos[5:10,2:ncol(Datos)]
+```
+Si deseamos traer todas las filas de una columna,simplemente dejamos sin escribir los numeros de fila:
+```{r }
+#extraemos toda la columna
+tablaDatos2[,2]
+#Lo mismo sucede con las filas
+tablaDatos2[27,]
+
+#los podemos guardar como un objeto nuevo 
+objetoAlgusto=tablaDatos2[27,]
+```
+Determinar filas y columnas con condicionales(filtrar datos), para esto nos apoyamos del comando which(). Por ejemplo queremos indizar las filas del objeto tabladatos2 que tengan valor positivo y guardarlo como un objeto nuevo
+```{r }
+#La funcion which busca el condicional que buscamos . buscamos en la tabladatos2 en la columna 2 valores mayores a 0.
+filaspositivas=which(tablaDatos2[,2]>0)
+
+#ahora generamos un objeto llamado tabla datos 2 positivo que es los datos con valores positivos en la columna 2
+tablaDatos2Positivo=tablaDatos2[filaspositivas,]
+```
+Indizar objetos data.frame por el nombre de la columna 
+```{r }
+Datos$Origen
+##si quisiera extraer las filas 3 a 10 de esa columna 
+Datos$Origen[3:10]
+```
+
+#Ejercicio
+En esta seccion modificaremos partes de un objeto data.frame (celdas)con operaciones sencillas.
+Como ejemplo cambiaremos la columna fecha del objeto datos para que deje de ser una secuencia de numero de excel para que se convierta en un objeto tipo Date con la funcion Date()
+```{r fechas}
+#Para que no arroje errores haremos la funcion de la siguiente manera para sustituir la fecha 
+as.Date(Datos$Fecha,origin="1899-12-30")
+Datos$Fecha=as.Date(Datos$Fecha,origin="1899-12-30")
+```
+Ctrol+alt+i para abrir un nuevo chong
+

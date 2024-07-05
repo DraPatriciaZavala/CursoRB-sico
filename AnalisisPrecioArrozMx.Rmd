@@ -1,0 +1,70 @@
+---
+title: "AnalisisdelPrecioArrozenMexico"
+author: "Dra. Patricia Zavala Villagómez"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r importacionpreciosarroz}
+#Se carga la libreria
+library(openxlsx)
+#Se carga la libreria de tabla de datos DT: library(DT)
+
+#Se carga la libreria para el analisis de datos
+library(dplyr)
+```
+#Introduccion
+En este documento se realizará un análisis estadistico y gráfico del precio del arroz cultivado y comercializado en las principales centrales de abastos de México.
+
+```{r importaDatosArroz}
+Datos=read.xlsx("datosarroz.xlsx")
+
+#Para que no arroje errores haremos la funcion de la siguiente manera para sustituir la fecha 
+Datos$Fecha=as.Date(Datos$Fecha,origin="1899-12-30")
+```
+Con los siguientes datos nos interesa saber cuantos estados estan en la base de datos para esto debemos convertir la columna origen de se un objeto tipo character a un objeto tipo factor, este tipo de objeto es util para analisis estadisticos y encontrar factores o clases 
+```{r}
+#convertimos el objeto 
+Datos$Origen=factor(Datos$Origen)
+
+#imprimir los niveles de factores
+levels(Datos$Origen)
+```
+vamos a extraer michoacan 
+
+```{r}
+#Seleccionamos los datos del Estado de Michoacan:
+datosMichoacan=subset(Datos,Origen=="Michoacán")
+```
+Repetimos el proceso de filtrado anterior para conocer lo consumido en michoacan 
+```{r}
+#Seleccionamos datos 
+datosMichoacan2=Datos%>%filter(Origen=="Michoacán")
+```
+
+Ahora nos interesa entrar de manera conjunta los datos de michoacan y la central de abastos de morelia, es decir filtrar lo de morelia
+```{r}
+#Seleccionamos datos 
+datosMichoacan3=Datos%>%filter(Origen=="Michoacán")%>%filter(Destino=="Michoacán: Mercado de Abasto de Morelia")
+```
+Nos interesa saber el precio promedio de arroz en México por fecha con la funcion summarize
+```{r}
+#Generamos la tabla de fecha promedio por fecha
+preciospromedio=Datos%>%group_by(Fecha)%>%
+  summarize(preciospromedio=mean(Precio.Frecuente))
+```
+
+mean=promedio
+sd=desviacion standar
+max=maximo
+min=minimo
+
+```{r Grafica sencilla}
+plot=(x=preciospromedio$Fecha,y=preciospromedio$preciospromedio,type="1")
+
+```
+
