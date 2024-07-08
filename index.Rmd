@@ -1,0 +1,15 @@
+---
+title: "Notas de ejemplo de mi curso Rstudio"
+author: "Dra. Patricia Zavala Villagómez"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Esta es la pagina principal de mi ejemplo de cómo publicar páginas web con GibHub y Rstudio. 
+
+Estas son algunas de las paginas como ejemplo:
+[Página web del ejercicio del analisis del precio del arroz mexicano](https://drapatriciazavala.github.io/CursoRB-sico/AnalisisPrecioArrozMx.html)
