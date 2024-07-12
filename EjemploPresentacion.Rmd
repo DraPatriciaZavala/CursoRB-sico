@@ -1,0 +1,77 @@
+---
+title: "Mi primer presentacion en R Tipo de cambio FIX"
+author: "Dra. Patricia Zavala Villagómez"
+date: "`r Sys.Date()`"
+output:
+  slidy_presentation: 
+  duration: 15
+  ioslides_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(siebanxicor)
+library(openxlsx)
+library(kableExtra)
+library(stargazer)
+library(dplyr)
+library(plotly)
+library(DT)
+
+# Este es mi token de Banxico SIE-API:
+
+token="83b94006a97472aeb3683b1ab748e024778e8017b2a19c31cebc675b02921f05"
+
+# activamos token y hacemos login con banxico
+setToken(token)
+```
+
+# Ejemplo de presentación con datos banxico 
+## Introducción
+En este trabajo mostramos como utilizar presentaciones en Rmarkdown con datos banxico
+
+## Datos del tipo de cambio FIX
+
+En este codigo vemos como descargar datos TC FIX desde las APi´s de banxico. Activamos token y descargamos los datos :
+
+```{r extraccion de datos FIX}
+# activamos token y hacemos login con banxico
+setToken(token)
+
+# estraccion de datos de tipo de cambio fix
+tcFIX=getSeriesData("SF43718",startDate="2003-05-16",endDate="2024-07-09")
+tcFIX=as.data.frame(tcFIX$SF43718)
+```
+## Tabla de datos
+Esta es la tabla de datos obtenida:
+
+```{r tabladatosFIX, echo=FALSE}
+datatable(tcFIX)
+```
+## Gráfica
+
+Esta es la grafica historica de los datos
+```{r grafica de Fix, echo=FALSE}
+# Creamos el objeto tipo ploty
+figFIX=plot_ly()
+
+#Añadimos la serie de datos CETES
+
+figFIX=add_trace(figFIX,x=~date,y=~value,data=fix,name="Datos FIX", type="scatter",mode="lines")
+# Le damos formato a nuestra gráfica:
+figFIX=layout(figFIX,
+                title="Datos FIX diarios",
+                xaxis=list(title="fecha(diario)"),
+                yaxis=list(title="pesos por dólar"))
+```
+
+Ahora insertamos la imagen a la presentación 
+
+![Figura 1: LogoFCCA](FCCAlogo.jpg){width=10%}
+
+## Youtube incrustado
+
+Aquí subiremos un video de youtube o una pagina 
+
+![Pagina 1: LogoFCCA](https://www.fcca.umich.mx/index.php)
+
